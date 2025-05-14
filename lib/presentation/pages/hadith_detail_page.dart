@@ -6,46 +6,129 @@ import '../controllers/hadith_controller.dart';
 
 class HadithDetailsPage extends StatelessWidget {
   final int chapterId;
-  HadithDetailsPage({required this.chapterId});
+  final int bookId;
+  final String bookName;
+  final String chapterTitle;
+  HadithDetailsPage(
+      {required this.bookId,
+      required this.chapterId,
+      required this.bookName,
+      required this.chapterTitle});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(HadithController(repo, chapterId));
+    final controller = Get.put(HadithController(repo, bookId, chapterId));
     return Scaffold(
-      appBar: AppBar(title: Text('Hadiths')),
+      backgroundColor: Color(0xFF0D111C),
+      appBar: AppBar(
+        backgroundColor: Color(0xFF0D111C),
+        iconTheme: IconThemeData(color: Colors.white),
+        elevation: 0,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(bookName[0].toUpperCase() + bookName.substring(1),
+                style: TextStyle(fontSize: 20, color: Colors.white)),
+            Text(chapterTitle,
+                style: TextStyle(fontSize: 14, color: Colors.white70)),
+          ],
+        ),
+      ),
       body: Obx(() => ListView.builder(
             itemCount: controller.hadiths.length,
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             itemBuilder: (context, index) {
               final hadith = controller.hadiths[index];
-              return Card(
-                margin: EdgeInsets.all(10),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Color(0xFF1C2230),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Header
+                    RichText(
+                      text: TextSpan(
                         children: [
-                          Text("Hadith ${index + 1}",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          IconButton(
-                            icon: Icon(Icons.more_vert),
-                            onPressed: () => showModalBottomSheet(
-                              context: context,
-                              builder: (_) => HadithBottomSheet(),
-                            ),
+                          TextSpan(
+                            text: "${index + 1}/${hadith.hadithId}. অধ্যায়ঃ ",
+                            style: TextStyle(
+                                color: Color(0xFF34D399),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14),
+                          ),
+                          TextSpan(
+                            text: +hadith.narrator ?? '',
+                            style: TextStyle(color: Colors.white, fontSize: 14),
                           ),
                         ],
                       ),
-                      SizedBox(height: 10),
-                      Text(hadith.ar ?? '', style: TextStyle(fontSize: 16)),
-                      SizedBox(height: 10),
-                      Text(hadith.bn ?? '',
-                          style:
-                              TextStyle(fontSize: 14, color: Colors.grey[700])),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 12),
+
+                    // Arabic text
+                    Text(
+                      hadith.ar ?? '',
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        height: 1.6,
+                        // fontFamily: 'Amiri', // Optional: Arabic font
+                      ),
+                    ),
+                    SizedBox(height: 12),
+
+                    // Tag
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF10B981),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        "সহিহ হাদিস",
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+
+                    // Bangla translation
+                    Text(
+                      hadith.bn ?? '',
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 15,
+                        height: 1.6,
+                        // fontFamily: 'NotoSansBengali', // Optional: Bangla font
+                      ),
+                    ),
+
+                    SizedBox(height: 10),
+
+                    // More options
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: IconButton(
+                        icon: Icon(Icons.more_vert, color: Colors.white54),
+                        onPressed: () => showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(16)),
+                          ),
+                          builder: (_) => HadithBottomSheet(),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               );
             },

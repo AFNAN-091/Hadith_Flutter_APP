@@ -63,8 +63,10 @@ class AppDatabase extends _$AppDatabase {
     return (select(chapter)..where((tbl) => tbl.bookId.equals(bookId))).get();
   }
 
-  Future<List<HadithData>> getHadithsByChapterId(int chapterId) {
-    return (select(hadith)..where((tbl) => tbl.chapterId.equals(chapterId)))
+  Future<List<HadithData>> getHadithsByChapterId(int bookId, int chapterId) {
+    return (select(hadith)
+          ..where((tbl) =>
+              tbl.bookId.equals(bookId) & tbl.chapterId.equals(chapterId)))
         .get();
   }
 }

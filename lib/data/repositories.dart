@@ -13,7 +13,8 @@ class HadithRepository {
     return await db.getChaptersByBookId(bookId);
   }
 
-  Future<List<HadithData>> fetchHadithsByChapter(int chapterId) async {
-    return await db.getHadithsByChapterId(chapterId);
+  Future<List<HadithData>> fetchHadithsByChapter(
+      int bookId, int chapterId) async {
+    return await db.getHadithsByChapterId(bookId, chapterId);
   }
 }
