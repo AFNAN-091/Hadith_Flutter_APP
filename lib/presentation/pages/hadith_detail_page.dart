@@ -51,25 +51,53 @@ class HadithDetailsPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Header
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "${index + 1}/${hadith.hadithId}. অধ্যায়ঃ ",
-                            style: TextStyle(
-                                color: Color(0xFF34D399),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14),
-                          ),
-                          TextSpan(
-                            text: +hadith.narrator ?? '',
-                            style: TextStyle(color: Colors.white, fontSize: 14),
-                          ),
-                        ],
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "${chapterId}/${hadith.hadithId}. অধ্যায়ঃ ",
+                          style: TextStyle(
+                              color: Color(0xFF34D399),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Color(0xFF10B981),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                "সহিহ হাদিস",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: IconButton(
+                                icon: Icon(Icons.more_vert,
+                                    color: Colors.white54),
+                                onPressed: () => showModalBottomSheet(
+                                  context: context,
+                                  backgroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(16)),
+                                  ),
+                                  builder: (_) => HadithBottomSheet(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                     SizedBox(height: 12),
-
                     // Arabic text
                     Text(
                       hadith.ar ?? '',
@@ -81,23 +109,22 @@ class HadithDetailsPage extends StatelessWidget {
                         // fontFamily: 'Amiri', // Optional: Arabic font
                       ),
                     ),
-                    SizedBox(height: 12),
 
                     // Tag
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Color(0xFF10B981),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        "সহিহ হাদিস",
-                        style: TextStyle(color: Colors.white, fontSize: 12),
+
+                    SizedBox(height: 20),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: hadith.narrator ?? '',
+                            style: TextStyle(
+                                color: Color(0xFF10B981), fontSize: 14),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(height: 10),
-
+                    SizedBox(height: 12),
                     // Bangla translation
                     Text(
                       hadith.bn ?? '',
@@ -113,21 +140,6 @@ class HadithDetailsPage extends StatelessWidget {
                     SizedBox(height: 10),
 
                     // More options
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: IconButton(
-                        icon: Icon(Icons.more_vert, color: Colors.white54),
-                        onPressed: () => showModalBottomSheet(
-                          context: context,
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(16)),
-                          ),
-                          builder: (_) => HadithBottomSheet(),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               );
@@ -142,7 +154,7 @@ class HadithBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(20),
-      height: 180,
+      height: 310,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -150,15 +162,84 @@ class HadithBottomSheet extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Options",
+          Text("More Options",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           SizedBox(height: 10),
           Row(
-            children: [Icon(Icons.copy), SizedBox(width: 10), Text("Copy")],
+            children: [
+              Icon(
+                Icons.bookmark,
+                color: Color(0xFF10B981),
+              ),
+              SizedBox(width: 10),
+              Text("Add to Collection")
+            ],
           ),
           SizedBox(height: 10),
           Row(
-            children: [Icon(Icons.share), SizedBox(width: 10), Text("Share")],
+            children: [
+              Icon(
+                Icons.copy_rounded,
+                color: Color(0xFF10B981),
+              ),
+              SizedBox(width: 10),
+              Text("Bangla Copy")
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Icon(
+                Icons.copy_rounded,
+                color: Color(0xFF10B981),
+              ),
+              SizedBox(width: 10),
+              Text("English Copy")
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Icon(
+                Icons.copy_rounded,
+                color: Color(0xFF10B981),
+              ),
+              SizedBox(width: 10),
+              Text("Arabic Copy")
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Icon(
+                Icons.add,
+                color: Color(0xFF10B981),
+              ),
+              SizedBox(width: 10),
+              Text("Add Note")
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Icon(
+                Icons.share_outlined,
+                color: Color(0xFF10B981),
+              ),
+              SizedBox(width: 10),
+              Text("Share")
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Icon(
+                Icons.report_gmailerrorred,
+                color: Color(0xFF10B981),
+              ),
+              SizedBox(width: 10),
+              Text("Share")
+            ],
           ),
         ],
       ),
